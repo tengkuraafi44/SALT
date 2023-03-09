@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Simple Web</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  </head>
+  <body>
+    <div class="container">
+      <h1>Data Konsumen</h1>
+      <div class="form-group">
+        <label for="input-parameter">Input Id Konsumen</label>
+        <input type="text" class="form-control" id="input-parameter">
+      </div>
+      <button class="btn btn-primary" onclick="getData()">Submit</button>
+      <div class="table-responsive">
+        <table class="table" id="data-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Nama</th>
+              <th>Alamat</th>
+              <th>Kota</th>
+              <th>Provinsi</th>
+              <th>Tanggal Registrasi</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="data-body"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <script>
+      function getData() {
+        const inputParameter = document.getElementById('input-parameter').value;
+        const url = `http://localhost:8080/salt/test/data?id=${inputParameter}`;
+        const dataBody = document.getElementById('data-body');
+
+        fetch(url)
+          .then(response => response.json())
+          .then(data => {
+            dataBody.innerHTML = '';
+            if (data.accountInformation && data.accountInformation.length > 0) {
+              data.accountInformation.forEach(item => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                  <td>${item.id}</td>
+                  <td>${item.nama}</td>
+                  <td>${item.alamat}</td>
+                  <td>${item.kota}</td>
+                  <td>${item.provinsi}</td>
+                  <td>${item.tgl_registrasi}</td>
+                  <td>${item.status}</td>
+                `;
+                dataBody.appendChild(row);
+              });
+            } else {
+              dataBody.innerHTML = '<tr><td colspan="7">Error loading data</td></tr>';
+            }
+          })
+          .catch(error => {
+            console.error(error);
+            dataBody.innerHTML = '<tr><td colspan="7">Error loading data</td></tr>';
+          });
+      }
+    </script>
+  </body>
+</html>
