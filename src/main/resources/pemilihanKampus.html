@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>List Universitas Berdasarkan Nilai</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <style>
+      .container {
+        background-image: url("https://www.example.com/background.jpg");
+        background-size: cover;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Data Siswa</h1>
+      <div class="form-group">
+        <label for="input-parameter">Input Nama dan Nilai</label>
+        <input type="text" class="form-control" id="input-parameter-nama" placeholder="Masukkan Nama">
+        <input type="text" class="form-control" id="input-parameter-nilai" placeholder="Masukkan Nilai">
+      </div>
+      <button class="btn btn-primary" onclick="getData()">Submit</button>
+      <div class="table-responsive">
+        <table class="table table-bordered table-striped table-hover">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Nama Universitas</th>
+              <th>Nilai Minimal</th>
+              <th>Alamat Universitas</th>
+            </tr>
+          </thead>
+          <tbody id="data-body"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <script>
+      function getData() {
+        const inputParameterNama = document.getElementById('input-parameter-nama').value;
+        const inputParameterNilai = document.getElementById('input-parameter-nilai').value;
+        const url = `http://localhost:8080/ahp/dss/kampus?namaSiswa=${inputParameterNama}&nilai=${inputParameterNilai}`;
+        const dataBody = document.getElementById('data-body');
+
+        fetch(url)
+          .then(response => response.json())
+          .then(data => {
+            dataBody.innerHTML = '';
+            if (data.data.listSekolah && data.data.listSekolah.length > 0) {
+              data.data.listSekolah.forEach(item => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                  <td>${item.id}</td>
+                  <td>${item.namaSekolah}</td>
+                  <td>${item.nilaiMinimalSekolah}</td>
+                  <td>${item.alamatSekolah}</td>
+                `;
+                dataBody.appendChild(row);
+              });
+            } else {
+              dataBody.innerHTML = '<tr><td colspan="4">Error loading data</td></tr>';
+            }
+          })
+          .catch(error => {
+            console.error(error);
+            dataBody.innerHTML = '<tr><td colspan="4">Error loading data</td></tr>';
+          });
+      }
+    </script>
+  </body>
+</html>

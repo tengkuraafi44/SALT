@@ -1,12 +1,10 @@
 package com.SimpleWeb.SALT.DTO;
 
 import com.SimpleWeb.SALT.ResponseData;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.experimental.SuperBuilder;
 
 import java.io.Serializable;
 import java.util.List;
@@ -15,7 +13,10 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+public class InquiryResponseSekolah implements Serializable, ResponseData {
 
-public class InquiryResponse implements Serializable, ResponseData {
-    List<InquiryDataDTO> accountInformation;
+    private String Nama;
+    private String NilaiSiswa;
+    List<InquiryData> ListSekolah;
+
 }
